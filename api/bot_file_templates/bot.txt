@@ -1,0 +1,34 @@
+<?php
+namespace {bot_var_name};
+
+include('../vendor/autoload.php');
+
+use Blazing\Bot;
+use Blazing\Logger;
+
+define('APP_ROOT_FOLDER', realpath(__DIR__.'/../'));
+define('BOT_NAME', '{bot_var_name}');
+
+//logs all errors occure into logs/errors.log
+function shutDownFunction() {
+    $error = error_get_last();
+    $logger = new Logger(BOT_NAME);
+    $logger->logError(var_export($error, true));
+}
+register_shutdown_function('{bot_var_name}\shutDownFunction');
+
+//autoloads this bot (so you can use this bots namespace on other places)
+$loader = require APP_ROOT_FOLDER . '/vendor/autoload.php';
+$loader->setPsr4(BOT_NAME . '\\', __DIR__);
+
+
+$token = '{bot_token}';
+$bot_username = '{bot_username}';
+$bot_name = '{bot_name}';
+$bot_id = '{bot_id}';
+
+${bot_var_name} = new Bot($token, $bot_username, $bot_name, $bot_id);
+
+return ${bot_var_name}->getUpdates();
+
+?>

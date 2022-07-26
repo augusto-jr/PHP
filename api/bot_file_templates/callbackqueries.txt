@@ -1,0 +1,28 @@
+<?php
+
+namespace {bot_var_name};
+
+use Blazing\Bot;
+use Blazing\BotException;
+use Blazing\api\CallBackQuery;
+
+class CallBackQueries{
+    public static function __callStatic($method, $args){
+        throw new BotException('callback query ' . $method . ' is not registered!');
+    }
+    public static function has($command){
+        return method_exists(__CLASS__, $command);
+    }
+    
+    /**
+     * this happs when a user sends a cbq with data which has 'test' as a first word	<= can be changed in Updates.php
+     * take note that all functions should be static.
+     * also all functions should include 2 compulsary args ($bot and $cbq) <= can modify from Updates.php
+    */
+    public static function test(Bot $bot, CallBackQuery $cbq){
+        // actions to perform
+    }
+}
+
+
+?>

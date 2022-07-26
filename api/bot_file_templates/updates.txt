@@ -1,0 +1,38 @@
+<?php
+
+namespace {bot_var_name};
+
+use Blazing\Bot;
+use Blazing\Update;
+
+class Updates{
+    
+    public static function newUpdate(Bot $bot, Update $update){
+	
+        // if update is a msg and has a command msg object and bot object will be passed to respective function in Commands.php
+        if ($update->getUpdateType() == 'Message'){
+            $msg = $update->getUpdateObject();
+            if ($update->hasCommand()){
+                $command = strtolower(str_ireplace('/', '', $update->getCommand()));
+                $command = str_ireplace("@" . $bot->getUsername(), '', $command);
+                
+                Commands::$command($bot, $msg);
+            }
+        }
+	
+	// if update is a call back query call back query object and bot object will be passed to respective function in CallBackQueries.php
+        if ($update->getUpdateType() == 'CallBackQuery'){
+            $cbq = $update->getUpdateObject();
+            $querystr = strtolower($update->getCallBackQueryData());
+            $queryarray = explode(' ', $querystr, 2);
+            $query = $queryarray[0];
+            
+            CallBackQueries::$query($bot, $cbq);
+        }
+    }
+}
+
+
+
+
+?>

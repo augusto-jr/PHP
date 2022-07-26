@@ -1,0 +1,53 @@
+<?php
+
+namespace {bot_var_name};
+
+use Blazing\Bot;
+use Blazing\BotException;
+use Blazing\api\Message;
+
+class Commands{
+    public static function __callStatic($method, $args){
+        throw new BotException('command /' . $method . ' is not registered!');
+    }
+    public static function has($command){
+        return method_exists(__CLASS__, $command);
+    }
+    
+    /**
+     * this happs when a user sends /start command
+    */
+    public static function start(Bot $bot, Message $msg){
+        // checks whether the command msg contains any other text
+        if (strtolower(str_ireplace("@" . $bot->getUsername(), '', $msg->getText())) !== '/start'){
+            exit();
+        }
+        $bot->sendRequest(array(
+            'method' => 'sendMessage',
+            'chat_id' => $msg->getChat()->getId(),
+            'reply_to_message_id' => $msg->getId(),
+            'text' => "Hello " . $msg->getSender()->getFirstName() . ". I am " . $bot->getName() . "."
+        ));
+    }
+    
+    /**
+     * this happs when a user sends /help command
+    */
+    public static function help(Bot $bot, Message $msg){
+        // checks whether the command msg contains any other text
+        if (strtolower(str_ireplace("@" . $bot->getUsername(), '', $msg->getText())) !== '/help'){
+            exit();
+        }
+        $text = "help";     //help text here
+        
+        $bot->sendRequest(array(
+            'method' => 'sendMessage',
+            'chat_id' => $msg->getChat()->getId(),
+            'reply_to_message_id' => $msg->getId(),
+            'text' => $text
+        ));
+    }
+}
+
+
+?>
